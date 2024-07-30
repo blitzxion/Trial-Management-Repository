@@ -10,6 +10,7 @@
         internal const string Organization = "Organizations";
         internal const string Patient = "Patients";
         internal const string PatientDataFile = "PatientDataFiles";
-        
+        internal const string PatientSiteHistory = "PatientSiteHistories";
+
     }
 }

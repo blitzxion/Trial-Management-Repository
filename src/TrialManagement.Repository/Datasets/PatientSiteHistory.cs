@@ -2,6 +2,7 @@
 
 namespace TrialManagement.Repository.Datasets
 {
+    [Table(TableNames.PatientSiteHistory, Schema = SqlSchemas.TrailSchemaName)]
     public class PatientSiteHistory
     {
         public Guid Id { get; set; }

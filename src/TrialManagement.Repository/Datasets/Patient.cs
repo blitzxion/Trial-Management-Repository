@@ -12,7 +12,7 @@ namespace TrialManagement.Repository.Datasets
         [Required(ErrorMessage = "Identifier is required")]
         public string Identifier { get; set; }
         
-        public Guid CurrentClinicalSiteId { get; set; }
+        public Guid? CurrentClinicalSiteId { get; set; }
         [ForeignKey(nameof(CurrentClinicalSiteId))]
         public ClinicalSite CurrentClinicalSite { get; set; }
         

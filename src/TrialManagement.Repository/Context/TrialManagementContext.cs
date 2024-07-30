@@ -1,5 +1,6 @@
 ﻿using TrialManagement.Repository.Datasets;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace TrialManagement.Repository.Context
 {
@@ -15,5 +16,19 @@ namespace TrialManagement.Repository.Context
         public TrialManagementContext() { }
         public TrialManagementContext(DbContextOptions options) : base(options) { }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<Patient>()
+                .HasOne(e => e.CurrentClinicalSite)
+                .WithMany(e=>e.Patients)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder
+                .Entity<PatientSiteHistory>()
+                .HasOne(e => e.Patient)
+                .WithMany(e => e.PatientSiteHistories)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }
