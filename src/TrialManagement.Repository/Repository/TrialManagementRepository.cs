@@ -1,27 +1,23 @@
 ﻿using FluentResults;
-using TrialManagement.Repository.Context;
-using TrialManagement.Repository.Datasets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Runtime.CompilerServices;
+using TrialManagement.Repository.Context;
+using TrialManagement.Repository.Datasets;
+[assembly: InternalsVisibleTo("TrialManagement.Repository.UnitTests")]
 namespace TrialManagement.Repository.Repository
 {
     public class TrialManagementRepository : ITrialManagementRepository
     {
         private readonly ILogger<TrialManagementRepository> _logger;
         private readonly TrialManagementContext _context;
-        public TrialManagementRepository(TrialManagementContext trialManagementContext, ILogger<TrialManagementRepository> logger) 
+        public TrialManagementRepository(TrialManagementContext trialManagementContext, ILogger<TrialManagementRepository> logger)
         {
             _context = trialManagementContext ?? throw new ArgumentNullException(nameof(trialManagementContext));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<Result<Organization>> AddOrginization(Organization organization)
+        public async Task<Result<Organization>> AddOrganization(Organization organization)
         {
             try
             {
@@ -66,7 +62,7 @@ namespace TrialManagement.Repository.Repository
             }
         }
 
-        public async Task<Result<Patient>> AddClinicalPatient(Patient patient)
+        public async Task<Result<ClinicalPatient>> AddClinicalPatient(ClinicalPatient patient)
         {
             try
             {
@@ -111,11 +107,16 @@ namespace TrialManagement.Repository.Repository
             }
         }
 
-        public async Task<Result<Organization?>> GetOrganization(Guid orgId) 
+        public async Task<Result<Organization?>> GetOrganization(Guid orgId, bool includeTrials = true)
         {
             try
             {
-                var result = await _context.Organizations.FindAsync(orgId);   
+                var query = _context.Organizations.AsQueryable();
+                if (includeTrials)
+                    query.Include(x => x.ClinicalTrials);
+
+                query.AsNoTracking();
+                var result = await query.FirstOrDefaultAsync(x => x.Id == orgId);
                 return Result.Ok(result);
             }
             catch (Exception ex)
@@ -125,14 +126,55 @@ namespace TrialManagement.Repository.Repository
             }
         }
 
-        public Result<IEnumerable<Organization>> FindOrganization(string orgName)
+        public Result<IEnumerable<Organization>> SearchOrganizationsByName(string orgName)
         {
             try
             {
                 var result = _context.Organizations
                     .AsNoTracking()
-                    .Where(x=> x.Name.Contains(orgName) == true).AsEnumerable();
+                    .Where(x => x.Name.Contains(orgName) == true).AsEnumerable();
 
+                return Result.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return Result.Fail(ErrorMessages.GenericErrorMessage);
+            }
+        }
+
+        public async Task<Result<ClinicalTrial?>> GetClinicalTrail(Guid trialId, bool includeSites = false, bool includePatients = false)
+        {
+            try
+            {
+                var query = _context.ClinicalTrials.AsQueryable();
+                if (includeSites)
+                    query.Include(x => x.ClinicalSites);
+                if (includePatients)
+                    query.Include(x => x.Patients);
+
+                query.AsNoTracking();
+                var result = await query.FirstOrDefaultAsync(x => x.Id == trialId);
+                return Result.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return Result.Fail(ErrorMessages.GenericErrorMessage);
+            }
+        }
+
+
+        public async Task<Result<ClinicalSite?>> GetClinicalSite(Guid siteId, bool includePatients = false)
+        {
+            try
+            {
+                var query = _context.ClinicalSites.AsQueryable();
+
+                if (includePatients)
+                    query.Include(x => x.Patients);
+                    
+                var result = await query.FirstOrDefaultAsync(x => x.Id == siteId);
                 return Result.Ok(result);
             }
             catch (Exception ex)

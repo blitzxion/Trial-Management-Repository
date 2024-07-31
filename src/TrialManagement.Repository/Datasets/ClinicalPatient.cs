@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TrialManagement.Repository.Datasets
 {
     [Table(TableNames.Patient, Schema = SqlSchemas.TrailSchemaName)]
-    public class Patient
+    public class ClinicalPatient
     {
         [Key]
         public Guid Id { get; set; }
@@ -12,7 +12,7 @@ namespace TrialManagement.Repository.Datasets
         [Required(ErrorMessage = "Identifier is required")]
         public string Identifier { get; set; }
         
-        public Guid? CurrentClinicalSiteId { get; set; }
+        public Guid CurrentClinicalSiteId { get; set; }
         [ForeignKey(nameof(CurrentClinicalSiteId))]
         public ClinicalSite CurrentClinicalSite { get; set; }
         

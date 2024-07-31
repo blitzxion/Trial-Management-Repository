@@ -8,7 +8,7 @@
         internal const string ClinicalSite = "ClinicalSites";
         internal const string ClinicalTrial = "ClinicalTrials";
         internal const string Organization = "Organizations";
-        internal const string Patient = "Patients";
+        internal const string Patient = "ClinicalPatients";
         internal const string PatientDataFile = "PatientDataFiles";
         internal const string PatientSiteHistory = "PatientSiteHistories";
 

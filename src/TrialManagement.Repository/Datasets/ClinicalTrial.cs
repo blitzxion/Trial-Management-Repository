@@ -20,7 +20,7 @@ namespace TrialManagement.Repository.Datasets
         [ForeignKey(nameof(OrganizationId))]
         public Organization Organization { get; set; }
         
-        public ICollection<Patient> Patients { get; set; }
+        public ICollection<ClinicalPatient> Patients { get; set; }
         
         public ICollection<ClinicalSite> ClinicalSites { get; set; }
     }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrialManagement.Repository.Context;
 
@@ -11,9 +12,10 @@ using TrialManagement.Repository.Context;
 namespace TrialManagement.Repository.Migrations
 {
     [DbContext(typeof(TrialManagementContext))]
-    partial class TrialManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20240731142202_RenamePatientToClinicalPatient")]
+    partial class RenamePatientToClinicalPatient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,7 @@ namespace TrialManagement.Repository.Migrations
 
                     b.HasIndex("CurrentClinicalSiteId");
 
-                    b.ToTable("ClinicalPatients", "TrialManagement");
+                    b.ToTable("Patients", "TrialManagement");
                 });
 
             modelBuilder.Entity("TrialManagement.Repository.Datasets.ClinicalSite", b =>

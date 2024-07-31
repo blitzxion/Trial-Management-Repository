@@ -14,10 +14,10 @@ namespace TrialManagement.Repository.Datasets
         public string Name { get; set; }
         public string SitePrefix { get; set; }
         
-        public Guid? ClinicalTrialId { get; set; }
+        public Guid ClinicalTrialId { get; set; }
         [ForeignKey(nameof(ClinicalTrialId))]
         public ClinicalTrial ClinicalTrial { get; set; }
         
-        public ICollection<Patient> Patients { get; set; }
+        public ICollection<ClinicalPatient> Patients { get; set; }
     }
 }

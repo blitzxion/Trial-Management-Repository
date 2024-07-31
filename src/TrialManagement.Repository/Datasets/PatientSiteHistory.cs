@@ -12,7 +12,7 @@ namespace TrialManagement.Repository.Datasets
 
         public Guid PatientId { get; set; }
         [ForeignKey(nameof(PatientId))]
-        public Patient Patient { get; set; }
+        public ClinicalPatient Patient { get; set; }
         
         public Guid ClinicalSiteId { get; set; }
         [ForeignKey(nameof(ClinicalSiteId))]
